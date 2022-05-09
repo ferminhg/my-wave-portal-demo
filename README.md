@@ -14,6 +14,16 @@ node scripts/sample-script.js
 npx hardhat help
 ```
 
+```
+npx hardhat run scripts/deploy.js --network rinkeby
+```
+
+Deploying contracts with account:  0xdE4D65Cb0155Ef342fA380b1c659a035Cf5FFaC3
+Account balance:  100000000000000000
+WavePortal address:  0xeD1d161AF05Dce9EEB62F5C7946e57C555F8b98c
+
 ## Frontend
 
 https://replit.com/@ferminhg/waveportal-starter-project 
+
+
