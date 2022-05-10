@@ -1,34 +1,27 @@
 const main = async () => {
-  const [owner, randomPerson] = await hre.ethers.getSigners();
   const waveContractFactory = await hre.ethers.getContractFactory("WavePortal");
-  const coffeeContractFactory = await hre.ethers.getContractFactory("CoffeePortal");
   const waveContract = await waveContractFactory.deploy();
-  const coffeeContract = await coffeeContractFactory.deploy();
   await waveContract.deployed();
+  console.log("Contract addy:", waveContract.address);
 
-  console.log("Contract deployed to:", waveContract.address);
-  console.log("Contract deployed to:", coffeeContract.address);
-  console.log("Contract deployed by:", owner.address);
-
-  let waveCount, coffeeCount;
+  let waveCount;
   waveCount = await waveContract.getTotalWaves();
-  coffeeCount = await coffeeContract.getTotalCoffees();
+  console.log(waveCount.toNumber());
 
-  let waveTxn = await waveContract.wave();
-  let coffeeTxn = await coffeeContract.coffee();
-  await waveTxn.wait();
-  await coffeeTxn.wait();
+  /**
+   * Let's send a few waves!
+   */
+  let waveTxn = await waveContract.wave("A message!");
+  await waveTxn.wait(); // Wait for the transaction to be mined
 
-  waveCount = await waveContract.getTotalWaves();
+  const [_, randomPerson] = await hre.ethers.getSigners();
+  waveTxn = await waveContract.connect(randomPerson).wave("Another message!");
+  await waveTxn.wait(); // Wait for the transaction to be mined
 
-  waveTxn = await waveContract.connect(randomPerson).wave();
-  await waveTxn.wait();
-  waveTxn = await waveContract.connect(randomPerson).wave();
-  await waveTxn.wait();
-
-  waveCount = await waveContract.getTotalWaves();
+  let allWaves = await waveContract.getAllWaves();
+  console.log(allWaves);
 };
-  
+
 const runMain = async () => {
   try {
     await main();
